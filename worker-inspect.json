@@ -1,0 +1,256 @@
+﻿[
+    {
+        "Id": "7d8c2fd16e45a591845435e0096517a600c9bf97e59a06261011454944f02c90",
+        "Created": "2026-03-21T03:07:47.750124563Z",
+        "Path": "/api/docker-entrypoint.sh",
+        "Args": [
+            "./scripts/workers"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 11408,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-03-21T03:14:27.431364438Z",
+            "FinishedAt": "2026-03-21T03:08:16.796675813Z"
+        },
+        "Image": "sha256:6b5d6a66aa19a8e878a52ea3c6a560afc1086734d96e2885b561fd5c6018f082",
+        "ResolvConfPath": "/var/lib/docker/containers/7d8c2fd16e45a591845435e0096517a600c9bf97e59a06261011454944f02c90/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/7d8c2fd16e45a591845435e0096517a600c9bf97e59a06261011454944f02c90/hostname",
+        "HostsPath": "/var/lib/docker/containers/7d8c2fd16e45a591845435e0096517a600c9bf97e59a06261011454944f02c90/hosts",
+        "LogPath": "/var/lib/docker/containers/7d8c2fd16e45a591845435e0096517a600c9bf97e59a06261011454944f02c90/7d8c2fd16e45a591845435e0096517a600c9bf97e59a06261011454944f02c90-json.log",
+        "Name": "/judge0-worker-1",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "C:\\Users\\DELL\\Desktop\\judge0\\judge0.conf:/judge0.conf:ro"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {
+                    "max-size": "100M"
+                }
+            },
+            "NetworkMode": "judge0_default",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "always",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": null,
+            "DnsSearch": null,
+            "ExtraHosts": [],
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": true,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": [
+                "label=disable"
+            ],
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": null,
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": null,
+            "ReadonlyPaths": null
+        },
+        "Storage": {
+            "RootFS": {
+                "Snapshot": {
+                    "Name": "overlayfs"
+                }
+            }
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "C:\\Users\\DELL\\Desktop\\judge0\\judge0.conf",
+                "Destination": "/judge0.conf",
+                "Mode": "ro",
+                "RW": false,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "7d8c2fd16e45",
+            "Domainname": "",
+            "User": "judge0",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "ExposedPorts": {
+                "2358/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/ruby-2.7.0/bin:/opt/.gem/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "GCC_VERSIONS=7.4.0       8.3.0       9.2.0",
+                "RUBY_VERSIONS=2.7.0",
+                "PYTHON_VERSIONS=3.8.1       2.7.17",
+                "OCTAVE_VERSIONS=5.1.0",
+                "BASH_VERSIONS=5.0",
+                "FPC_VERSIONS=3.0.4",
+                "HASKELL_VERSIONS=8.8.1",
+                "MONO_VERSIONS=6.6.0.161",
+                "NODE_VERSIONS=12.14.0",
+                "ERLANG_VERSIONS=22.2",
+                "ELIXIR_VERSIONS=1.9.4",
+                "RUST_VERSIONS=1.40.0",
+                "GO_VERSIONS=1.13.5",
+                "FBC_VERSIONS=1.07.1",
+                "OCAML_VERSIONS=4.09.0",
+                "PHP_VERSIONS=7.4.1",
+                "D_VERSIONS=2.089.1",
+                "LUA_VERSIONS=5.3.5",
+                "TYPESCRIPT_VERSIONS=3.7.4",
+                "NASM_VERSIONS=2.14.02",
+                "GPROLOG_VERSIONS=1.4.5",
+                "SBCL_VERSIONS=2.0.0",
+                "COBOL_VERSIONS=2.2",
+                "SWIFT_VERSIONS=5.2.3",
+                "KOTLIN_VERSIONS=1.3.70",
+                "MONO_VERSION=6.6.0.161",
+                "R_VERSIONS=4.0.0",
+                "SCALA_VERSIONS=2.13.2",
+                "CLOJURE_VERSION=1.10.1",
+                "LANG=en_US.UTF-8",
+                "LANGUAGE=en_US:en",
+                "LC_ALL=en_US.UTF-8",
+                "BOX_ROOT=/var/local/lib/isolate",
+                "JUDGE0_HOMEPAGE=https://judge0.com",
+                "JUDGE0_SOURCE_CODE=https://github.com/judge0/judge0",
+                "JUDGE0_MAINTAINER=Herman Zvonimir Do┼íilovi─ç \u003chermanz.dosilovic@gmail.com\u003e",
+                "GEM_HOME=/opt/.gem/",
+                "JUDGE0_VERSION=1.13.1"
+            ],
+            "Cmd": [
+                "./scripts/workers"
+            ],
+            "Image": "judge0/judge0:latest",
+            "Volumes": null,
+            "WorkingDir": "/api",
+            "Entrypoint": [
+                "/api/docker-entrypoint.sh"
+            ],
+            "Labels": {
+                "com.docker.compose.config-hash": "5c8bfbc54c483f2f97e623d8758a35186b1b86b7d89b10de5e576ae29f32a727",
+                "com.docker.compose.container-number": "1",
+                "com.docker.compose.depends_on": "",
+                "com.docker.compose.image": "sha256:6b5d6a66aa19a8e878a52ea3c6a560afc1086734d96e2885b561fd5c6018f082",
+                "com.docker.compose.oneoff": "False",
+                "com.docker.compose.project": "judge0",
+                "com.docker.compose.project.config_files": "C:\\Users\\DELL\\Desktop\\judge0\\docker-compose.yml",
+                "com.docker.compose.project.working_dir": "C:\\Users\\DELL\\Desktop\\judge0",
+                "com.docker.compose.service": "worker",
+                "com.docker.compose.version": "5.1.0",
+                "homepage": "https://judge0.com",
+                "maintainer": "Herman Zvonimir Do┼íilovi─ç \u003chermanz.dosilovic@gmail.com\u003e",
+                "source_code": "https://github.com/judge0/judge0",
+                "version": "1.13.1"
+            },
+            "StopTimeout": 1
+        },
+        "NetworkSettings": {
+            "SandboxID": "eb22c49d0b5b1b293116ac19b4b67d5a0124926951ceb7ab2eaace826b8ab600",
+            "SandboxKey": "/var/run/docker/netns/eb22c49d0b5b",
+            "Ports": {
+                "2358/tcp": null
+            },
+            "Networks": {
+                "judge0_default": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "judge0-worker-1",
+                        "worker"
+                    ],
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "88a7f9872013a64a63ee9309361236b14fedc6b90f0871b4d5be708cf9423814",
+                    "EndpointID": "883150e9a07687a48d7ebc6dd713398abc2b6c63e91b15596cdaa3f37e90e016",
+                    "Gateway": "172.18.0.1",
+                    "IPAddress": "172.18.0.4",
+                    "MacAddress": "32:34:e1:a4:cd:7c",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": [
+                        "judge0-worker-1",
+                        "worker",
+                        "7d8c2fd16e45"
+                    ]
+                }
+            }
+        },
+        "ImageManifestDescriptor": {
+            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+            "digest": "sha256:6b5d6a66aa19a8e878a52ea3c6a560afc1086734d96e2885b561fd5c6018f082",
+            "size": 10680,
+            "platform": {
+                "architecture": "amd64",
+                "os": "linux"
+            }
+        }
+    }
+]

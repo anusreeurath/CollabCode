@@ -1,0 +1,12 @@
+{
+  "name": "collabcode-root",
+  "version": "1.0.0",
+  "description": "Real-time collaborative code editor - root workspace",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\" --names \"SERVER,CLIENT\" --prefix-colors \"cyan,magenta\"",
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
