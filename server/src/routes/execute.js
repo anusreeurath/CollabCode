@@ -12,7 +12,6 @@ const LANGUAGE_MAP = {
   60: { name: 'Go',                   jdoodle: { language: 'go',         versionIndex: '4' } },
   73: { name: 'Rust',                 jdoodle: { language: 'rust',       versionIndex: '4' } },
   50: { name: 'C (GCC)',              jdoodle: { language: 'c',          versionIndex: '5' } },
-  94: { name: 'TypeScript',           jdoodle: { language: 'typescript', versionIndex: '1' } },
 };
 const VALID_IDS = new Set(Object.keys(LANGUAGE_MAP).map(Number));
 

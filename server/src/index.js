@@ -7,12 +7,13 @@ const rateLimit = require('express-rate-limit');
 const { Server } = require('socket.io');
 const { YSocketIO } = require('y-socket.io/dist/server');
 
-const connectDB = require('./config/db');
+const connectDB    = require('./config/db');
 const authRoutes    = require('./routes/auth');
 const roomRoutes    = require('./routes/rooms');
 const executeRoutes = require('./routes/execute');
 const explainRoutes = require('./routes/explain');
 const snapshotRoutes = require('./routes/snapshots');
+const YjsDoc       = require('./models/YjsDoc');
 const { initSocket } = require('./socket/socketManager');
 
 const app = express();
@@ -37,11 +38,40 @@ const ysocketio = new YSocketIO(io, {
 });
 ysocketio.initialize();
 
-ysocketio.on('document-loaded', (doc) => {
+const Y = require('yjs');
+
+ysocketio.on('document-loaded', async (doc) => {
+  const roomId = doc.name.replace('yjs|', '');
   console.log(`[Yjs] Document loaded: ${doc.name}`);
+
+  // Restore persisted state from MongoDB if it exists
+  try {
+    const saved = await YjsDoc.findOne({ roomId });
+    if (saved?.state) {
+      Y.applyUpdate(doc, new Uint8Array(saved.state));
+      console.log(`[Yjs] Restored state for: ${doc.name}`);
+    }
+  } catch (err) {
+    console.error(`[Yjs] Failed to restore state for ${doc.name}:`, err.message);
+  }
 });
-ysocketio.on('all-document-connections-closed', (doc) => {
+
+ysocketio.on('all-document-connections-closed', async (doc) => {
+  const roomId = doc.name.replace('yjs|', '');
   console.log(`[Yjs] All connections closed for: ${doc.name}`);
+
+  // Persist current document state to MongoDB
+  try {
+    const state = Buffer.from(Y.encodeStateAsUpdate(doc));
+    await YjsDoc.findOneAndUpdate(
+      { roomId },
+      { state, savedAt: new Date() },
+      { upsert: true, new: true }
+    );
+    console.log(`[Yjs] Persisted state for: ${doc.name}`);
+  } catch (err) {
+    console.error(`[Yjs] Failed to persist state for ${doc.name}:`, err.message);
+  }
 });
 
 // ── Security middleware ────────────────────────────────────────────────────

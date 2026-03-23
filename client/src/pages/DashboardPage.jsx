@@ -5,9 +5,8 @@ import Navbar from '../components/Navbar.jsx';
 import api from '../services/api.js';
 
 const LANGUAGES = [
-  'javascript', 'typescript', 'python', 'java', 'cpp',
-  'c', 'csharp', 'go', 'rust', 'html', 'css', 'json',
-  'markdown', 'sql', 'php', 'ruby', 'swift', 'kotlin',
+  'javascript', 'python', 'java', 'cpp',
+  'c', 'go', 'rust',
 ];
 
 function formatDate(dateStr) {

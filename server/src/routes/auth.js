@@ -62,12 +62,12 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ username: username.trim().toLowerCase() }).select('+password');
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'No account found with that username. Please register first.' });
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'Incorrect password. Please try again.' });
     }
 
     const token = signToken(user);

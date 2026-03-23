@@ -17,7 +17,6 @@ const CURSOR_COLORS = [
 // ── Language maps ─────────────────────────────────────────────────────────
 const LANGUAGES = [
   { key: 'javascript', id: 93,  name: 'JavaScript (Node.js)',  monaco: 'javascript' },
-  { key: 'typescript', id: 94,  name: 'TypeScript',             monaco: 'typescript' },
   { key: 'python',     id: 71,  name: 'Python 3',               monaco: 'python'     },
   { key: 'cpp',        id: 54,  name: 'C++ (GCC 17)',           monaco: 'cpp'        },
   { key: 'c',          id: 50,  name: 'C (GCC)',                monaco: 'c'          },
