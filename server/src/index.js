@@ -8,9 +8,11 @@ const { Server } = require('socket.io');
 const { YSocketIO } = require('y-socket.io/dist/server');
 
 const connectDB = require('./config/db');
-const authRoutes = require('./routes/auth');
-const roomRoutes = require('./routes/rooms');
+const authRoutes    = require('./routes/auth');
+const roomRoutes    = require('./routes/rooms');
 const executeRoutes = require('./routes/execute');
+const explainRoutes = require('./routes/explain');
+const snapshotRoutes = require('./routes/snapshots');
 const { initSocket } = require('./socket/socketManager');
 
 const app = express();
@@ -72,7 +74,9 @@ app.use(express.urlencoded({ extended: true }));
 // ── Routes ─────────────────────────────────────────────────────────────────
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/rooms', roomRoutes);
+app.use('/api/rooms/:roomId', snapshotRoutes);  // snapshot routes get :roomId via mergeParams
 app.use('/api/execute', executeRoutes);
+app.use('/api/explain', explainRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

@@ -106,32 +106,44 @@ async function runOnJDoodle(source_code, language_id, stdin) {
   }
 
   // JDoodle returns { output, statusCode, memory, cpuTime }
-  //  statusCode 200 = success, 400/500 = runtime errors
+  //  statusCode 200 = API call success (does NOT mean the code ran without errors)
   const output    = data.output || '';
-  const isSuccess = res.ok && data.statusCode === 200 && !output.includes('JDoodle: ');
 
-  // JDoodle doesn't separate stdout/stderr — everything is in output
-  // Detect compile errors by keywords
+  // ── Detect error types from output text ─────────────────────────────────
+  // Compile errors: syntax/compile-time keywords
   const isCompileErr =
-    output.includes('error:') ||
     output.includes('SyntaxError') ||
+    output.includes('error:') ||
     output.includes('cannot find symbol') ||
-    output.includes('undefined reference');
+    output.includes('undefined reference') ||
+    output.includes('error[E') ||          // Rust compile errors
+    output.includes('is not defined') && output.includes('SyntaxError');
+
+  // Runtime errors: Python tracebacks, Java/Go/Rust exceptions
+  const isRuntimeErr = !isCompileErr && (
+    output.includes('Traceback (most recent call last)') ||  // Python
+    /\w+Error:/.test(output) ||                              // NameError: / TypeError: etc.
+    /\w+Exception/.test(output) ||                          // Java exceptions
+    output.includes('panic:') ||                            // Go / Rust
+    output.includes("thread 'main' panicked")               // Rust
+  );
+
+  const isAnyError  = isCompileErr || isRuntimeErr;
+  const isSuccess   = !isAnyError && res.ok && data.statusCode === 200 && !output.includes('JDoodle: ');
 
   return {
-    stdout:         isSuccess && !isCompileErr ? output : '',
-    stderr:         !isSuccess && !isCompileErr ? output : '',
+    stdout:         isSuccess ? output : '',
+    stderr:         isRuntimeErr ? output : '',
     compile_output: isCompileErr ? output : '',
     status: {
-      id: isSuccess && !isCompileErr ? 3 : (isCompileErr ? 6 : 4),
-      description: isSuccess && !isCompileErr
-        ? 'Accepted'
-        : isCompileErr ? 'Compilation Error' : 'Runtime Error',
+      id: isSuccess ? 3 : (isCompileErr ? 6 : 11),
+      description: isSuccess ? 'Accepted' : isCompileErr ? 'Compilation Error' : 'Runtime Error',
     },
     time:   data.cpuTime  ? String(data.cpuTime)  : null,
     memory: data.memory   ? String(data.memory)   : null,
     engine: 'JDoodle (cloud)',
   };
+
 }
 
 // ── POST /api/execute ──────────────────────────────────────────────────────
