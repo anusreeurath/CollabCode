@@ -187,7 +187,7 @@ export default function RoomPage() {
       if (!user || !roomId) return;
       const ydoc = new Y.Doc();
       ydocRef.current = ydoc;
-      const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
+      const serverUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
       const provider = new SocketIOProvider(serverUrl, `yjs|${roomId}`, ydoc, {
         autoConnect: true,
         gcEnabled: true,
@@ -276,8 +276,8 @@ export default function RoomPage() {
     setExplainDone(false);
     setExplainError('');
     try {
-      const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
-      const res = await fetch(`${serverUrl}/api/execute`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const res = await fetch(`${apiUrl}/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -361,8 +361,8 @@ export default function RoomPage() {
     setExplainError('');
 
     try {
-      const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
-      const res = await fetch(`${serverUrl}/api/explain`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const res = await fetch(`${apiUrl}/explain`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ error: errorText, code, language: LANG_BY_KEY[langKey].name, roomId }),
