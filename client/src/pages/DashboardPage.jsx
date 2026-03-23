@@ -15,6 +15,130 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+// ── Trash / Delete icon SVG ──────────────────────────────────────────────────
+function TrashIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6M14 11v6" />
+      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+    </svg>
+  );
+}
+
+// ── Delete Confirmation Modal ─────────────────────────────────────────────────
+function DeleteConfirmModal({ room, onConfirm, onClose, loading }) {
+  return (
+    <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-room-title">
+      <div className="modal" style={{ maxWidth: '400px' }}>
+        <div className="modal-header">
+          <h2 id="delete-room-title" style={{ color: 'var(--clr-error)' }}>🗑️ Remove Room</h2>
+          <button className="modal-close" onClick={onClose} aria-label="Close modal" disabled={loading}>✕</button>
+        </div>
+
+        <p style={{ color: 'var(--clr-text-200)', marginBottom: '0.5rem', fontSize: '0.95rem' }}>
+          Remove <strong style={{ color: 'var(--clr-text-100)' }}>"{room.name}"</strong> from your dashboard?
+          This only affects your view — other members can still access the room.
+        </p>
+
+        <div className="modal-actions" style={{ marginTop: '1.5rem' }}>
+          <button
+            id="confirm-delete-room-btn"
+            className={`btn btn-danger${loading ? ' btn-loading' : ''}`}
+            style={{ flex: 1 }}
+            onClick={onConfirm}
+            disabled={loading}
+          >
+            {loading ? 'Removing…' : 'Remove from Dashboard'}
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={onClose} disabled={loading}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Room Card ──────────────────────────────────────────────────────────────────
+function RoomCard({ room, userId, onDeleted }) {
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
+
+  // Coerce both to strings to handle ObjectId vs plain-string comparison safely
+  const isOwner = room.createdBy && String(room.createdBy) === String(userId);
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      // DELETE now means "hide from my dashboard" for everyone — no permanent deletion
+      await api.delete(`/rooms/${room.roomId}`);
+      setShowConfirm(false);
+      onDeleted(room.roomId);
+    } catch (err) {
+      // axios interceptor wraps errors as plain Error — err.message already has the text
+      setDeleteError(err.message || 'Failed to remove room');
+      setDeleting(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="room-card-wrapper">
+        <Link
+          to={`/room/${room.roomId}`}
+          className="room-card"
+          id={`room-card-${room.roomId}`}
+          aria-label={`Open room: ${room.name}`}
+        >
+          <div className="room-card-name">
+            {room.name}
+            {!isOwner && (
+              <span className="room-badge-joined" title="You joined this room">Joined</span>
+            )}
+          </div>
+          <div className="room-card-meta">
+            <span className="lang-badge">{room.language}</span>
+            <span>{formatDate(room.createdAt)}</span>
+          </div>
+          <div className="room-card-id">ID: {room.roomId}</div>
+        </Link>
+
+        {/* Delete / Leave button */}
+        <button
+          className="room-delete-btn"
+          id={`delete-room-btn-${room.roomId}`}
+          aria-label={`Remove room ${room.name} from dashboard`}
+          title="Remove from dashboard"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowConfirm(true); }}
+        >
+          <TrashIcon />
+        </button>
+
+        {deleteError && (
+          <div className="alert alert-error" role="alert" style={{ marginTop: '0.5rem', fontSize: '0.8rem' }}>
+            ⚠️ {deleteError}
+          </div>
+        )}
+      </div>
+
+      {showConfirm && (
+        <DeleteConfirmModal
+          room={room}
+          onConfirm={handleDelete}
+          onClose={() => { setShowConfirm(false); setDeleteError(''); }}
+          loading={deleting}
+        />
+      )}
+    </>
+  );
+}
+
+// ── Create Room Modal ────────────────────────────────────────────────────────
 function CreateRoomModal({ onClose, onCreated }) {
   const [form, setForm] = useState({ name: '', language: 'javascript' });
   const [loading, setLoading] = useState(false);
@@ -104,6 +228,7 @@ function CreateRoomModal({ onClose, onCreated }) {
   );
 }
 
+// ── Dashboard Page ────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -207,25 +332,12 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 rooms.map((room) => (
-                  <Link
+                  <RoomCard
                     key={room.roomId}
-                    to={`/room/${room.roomId}`}
-                    className="room-card"
-                    id={`room-card-${room.roomId}`}
-                    aria-label={`Open room: ${room.name}`}
-                  >
-                    <div className="room-card-name">
-                      {room.name}
-                      {room.createdBy && room.createdBy !== user?._id && room.createdBy?._id !== user?._id && (
-                        <span className="room-badge-joined" title="You joined this room">Joined</span>
-                      )}
-                    </div>
-                    <div className="room-card-meta">
-                      <span className="lang-badge">{room.language}</span>
-                      <span>{formatDate(room.createdAt)}</span>
-                    </div>
-                    <div className="room-card-id">ID: {room.roomId}</div>
-                  </Link>
+                    room={room}
+                    userId={user?.id}
+                    onDeleted={(roomId) => setRooms(prev => prev.filter(r => r.roomId !== roomId))}
+                  />
                 ))
               )}
             </div>

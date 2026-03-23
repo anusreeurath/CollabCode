@@ -609,6 +609,51 @@ input, textarea, select {
   gap: var(--sp-4);
 }
 
+/* wrapper makes the delete button position relative to the card */
+.room-card-wrapper {
+  position: relative;
+}
+
+.room-card-wrapper .room-card {
+  height: 100%;
+}
+
+/* Floating delete / leave button */
+.room-delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--clr-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition-fast), color var(--transition-fast),
+    background var(--transition-fast);
+  z-index: 10;
+}
+
+.room-card-wrapper:hover .room-delete-btn {
+  opacity: 1;
+}
+
+.room-delete-btn:hover {
+  color: var(--clr-error);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.room-delete-btn:focus-visible {
+  outline: 2px solid var(--clr-error);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
 .room-card {
   background: var(--clr-surface);
   border: 1px solid var(--clr-border);

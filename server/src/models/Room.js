@@ -43,6 +43,14 @@ const roomSchema = new mongoose.Schema(
         ref: 'User',
       },
     ],
+    // Users who have dismissed this room from their dashboard.
+    // The room is NOT deleted — it just won't appear for these users.
+    hiddenBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     timestamps: true,

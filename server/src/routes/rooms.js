@@ -39,13 +39,15 @@ router.post('/', async (req, res) => {
 });
 
 // ── GET /api/rooms ───────────────────────────────────────────────────────────
-// Get rooms created by OR joined by the current user (for dashboard)
+// Get rooms created by OR joined by the current user, excluding hidden ones.
 router.get('/', async (req, res) => {
   try {
     const rooms = await Room.find({
-      $or: [
-        { createdBy: req.user.id },
-        { members: req.user.id },
+      $and: [
+        // must be creator or member
+        { $or: [{ createdBy: req.user.id }, { members: req.user.id }] },
+        // must NOT be hidden by this user
+        { hiddenBy: { $ne: req.user.id } },
       ],
     })
       .sort({ updatedAt: -1 })
@@ -84,6 +86,8 @@ router.post('/:roomId/join', async (req, res) => {
   }
 });
 
+// (leave route removed — DELETE now handles dashboard removal for all users)
+
 // ── GET /api/rooms/:roomId ───────────────────────────────────────────────────
 // Get room info by shareable roomId
 router.get('/:roomId', async (req, res) => {
@@ -105,7 +109,8 @@ router.get('/:roomId', async (req, res) => {
 });
 
 // ── DELETE /api/rooms/:roomId ────────────────────────────────────────────────
-// Delete room (owner only)
+// Hide a room from the requesting user's dashboard only.
+// The room is NEVER permanently deleted — it stays visible to all other members.
 router.delete('/:roomId', async (req, res) => {
   try {
     const room = await Room.findOne({ roomId: req.params.roomId });
@@ -114,15 +119,16 @@ router.delete('/:roomId', async (req, res) => {
       return res.status(404).json({ error: 'Room not found' });
     }
 
-    if (room.createdBy.toString() !== req.user.id) {
-      return res.status(403).json({ error: 'Not authorized to delete this room' });
-    }
+    // Add this user to hiddenBy so the room disappears from their dashboard
+    await Room.updateOne(
+      { roomId: req.params.roomId },
+      { $addToSet: { hiddenBy: req.user.id } }
+    );
 
-    await room.deleteOne();
-    res.json({ message: 'Room deleted successfully' });
+    res.json({ message: 'Room removed from your dashboard' });
   } catch (error) {
     console.error('[DELETE /rooms/:roomId]', error);
-    res.status(500).json({ error: 'Failed to delete room' });
+    res.status(500).json({ error: 'Failed to remove room' });
   }
 });
 
