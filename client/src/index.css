@@ -282,6 +282,11 @@ input, textarea, select {
   cursor: not-allowed;
 }
 
+.form-input.input-error {
+  border-color: var(--clr-error);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
 .form-error {
   font-size: 0.82rem;
   color: var(--clr-error);
@@ -331,12 +336,9 @@ input, textarea, select {
 .auth-logo .logo-icon {
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, var(--clr-primary), var(--clr-secondary));
   border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
+  object-fit: cover;
+  display: block;
   margin: 0 auto var(--sp-4);
   box-shadow: var(--shadow-glow);
 }
@@ -446,12 +448,10 @@ input, textarea, select {
 .navbar-brand .brand-icon {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, var(--clr-primary), var(--clr-secondary));
   border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
 }
 
 .navbar-actions {

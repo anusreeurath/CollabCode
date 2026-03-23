@@ -39,7 +39,6 @@ function DeleteConfirmModal({ room, onConfirm, onClose, loading }) {
 
         <p style={{ color: 'var(--clr-text-200)', marginBottom: '0.5rem', fontSize: '0.95rem' }}>
           Remove <strong style={{ color: 'var(--clr-text-100)' }}>"{room.name}"</strong> from your dashboard?
-          This only affects your view — other members can still access the room.
         </p>
 
         <div className="modal-actions" style={{ marginTop: '1.5rem' }}>
@@ -215,7 +214,7 @@ function CreateRoomModal({ onClose, onCreated }) {
               style={{ flex: 1 }}
               disabled={loading}
             >
-              {loading ? 'Creating…' : '⚡ Create Room'}
+              {loading ? 'Creating…' : 'Create Room'}
             </button>
             <button type="button" className="btn btn-secondary" onClick={onClose} disabled={loading}>
               Cancel
@@ -236,6 +235,7 @@ export default function DashboardPage() {
   const [loadingRooms, setLoadingRooms] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [fetchError, setFetchError] = useState('');
+  const [joinError, setJoinError] = useState('');
 
   const fetchRooms = useCallback(async () => {
     setLoadingRooms(true);
@@ -268,25 +268,34 @@ export default function DashboardPage() {
             <h1>My Rooms</h1>
             <p>Welcome back, <strong>{user?.username}</strong>. Pick up where you left off.</p>
           </div>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
             {/* Join existing room form */}
-            <form 
-              onSubmit={(e) => {
-                e.preventDefault();
-                const id = e.target.elements.joinId.value.trim();
-                if (id) navigate(`/room/${id}`);
-              }}
-              style={{ display: 'flex', gap: '0.5rem' }}
-            >
-              <input 
-                name="joinId" 
-                type="text" 
-                placeholder="Paste Room ID..." 
-                className="form-input" 
-                style={{ padding: '0.5rem 0.8rem', width: '220px' }} 
-              />
-              <button type="submit" className="btn btn-secondary">Join</button>
-            </form>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const id = e.target.elements.joinId.value.trim();
+                  if (!id) { setJoinError('Please enter a Room ID first.'); return; }
+                  navigate(`/room/${id}`);
+                }}
+                style={{ display: 'flex', gap: '0.5rem' }}
+              >
+                <input
+                  name="joinId"
+                  type="text"
+                  placeholder="Paste Room ID..."
+                  className={`form-input${joinError ? ' input-error' : ''}`}
+                  style={{ padding: '0.5rem 0.8rem', width: '220px' }}
+                  onChange={() => joinError && setJoinError('')}
+                />
+                <button type="submit" className="btn btn-secondary">Join</button>
+              </form>
+              {joinError && (
+                <span style={{ fontSize: '0.8rem', color: 'var(--clr-error)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  ⚠️ {joinError}
+                </span>
+              )}
+            </div>
 
             <button
               id="open-create-room-btn"

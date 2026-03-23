@@ -13,7 +13,7 @@ export default function Navbar() {
   return (
     <nav className="navbar" role="navigation" aria-label="Main navigation">
       <Link to="/dashboard" className="navbar-brand">
-        <div className="brand-icon" aria-hidden="true">⚡</div>
+        <img src="/Gemini_Generated_Image_g65hoig65hoig65h.png" alt="CollabCode Logo" className="brand-icon" />
         CollabCode
       </Link>
 

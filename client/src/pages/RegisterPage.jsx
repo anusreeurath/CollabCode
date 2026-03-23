@@ -57,7 +57,7 @@ export default function RegisterPage() {
     <main className="auth-page">
       <div className="auth-container">
         <header className="auth-logo">
-          <div className="logo-icon" aria-hidden="true">⚡</div>
+          <img src="/Gemini_Generated_Image_g65hoig65hoig65h.png" alt="CollabCode Logo" className="logo-icon" />
           <h1>CollabCode</h1>
           <p>Real-time collaborative code editor</p>
         </header>
